@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,7 @@ Route::group(['middleware' => 'isAdmin'], function(){
 Route::get('/user/register', [UserController::class, 'show']);
 Route::post('/user/create', [UserController::class, 'store']);
 
-Route::post('/user/logout', [UserController::class, 'logout']);
+
 Route::get('/', [UserController::class, 'index']);
 Route::get('/user/alluser', [UserController::class, 'alluser']);
 Route::get('/user/show/{id}', [UserController::class, 'showuser']);
@@ -44,7 +45,16 @@ Route::get('/question/edit/{question}', [QuestionController::class, 'edit']);
 Route::put('/question/update/{question}',[QuestionController::class, 'update']);
 Route::delete('/question/delete/{question}', [QuestionController::class, 'destroy']);
 
+Route::get('/exam/assign',[ExamController::class, 'create']);
+Route::post('exam/assigning',[ExamController::class,'assignExam']);
+Route::get('/exam/index',[ExamController::class, 'index']);
+Route::post('exam/remove',[ExamController::class,'removeExam']);
+
 });
+Route::post('/user/logout', [UserController::class, 'logout']);
 Route::get('/user/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/user/auth', [UserController::class, 'authenticate']);
+Route::get('/student/index',[UserController::class, 'home']);
+Route::get('/exam/viewexam',[UserController::class, 'examinerindex']);
+
 

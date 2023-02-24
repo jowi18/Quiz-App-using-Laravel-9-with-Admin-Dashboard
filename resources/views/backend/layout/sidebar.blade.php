@@ -20,9 +20,9 @@
                     
                     <ul class="widget widget-menu unstyled">
                         <li><a href="/question/index"><i class="menu-icon icon-bold"></i> Manage Question </a></li>
+                        <li><a href="/exam/assign"><i class="menu-icon icon-paste"></i>Assign Exam </a></li>
+                        <li><a href="/exam/index"><i class="menu-icon icon-table"></i>Manage Assigned Exam </a></li>
                         <li><a href="/user/alluser"><i class="menu-icon icon-book"></i>Manage User</a></li>
-                        <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>
-                        <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
                         <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
                     </ul>
                     <!--/.widget-nav-->

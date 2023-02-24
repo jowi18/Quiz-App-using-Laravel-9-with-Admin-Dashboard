@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Quiz;
+use App\Models\Result;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -42,12 +45,29 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        if(auth()->attempt($validated)){
+        if(auth()->attempt($validated) && auth()->user()->is_admin == 1){
             $request->session()->regenerate();
-            return redirect('/')->with('message', 'Sucessfully Login!');
-        }
-            return back()->withErrors(['email' => 'Login Failed']);
+            return redirect('/');
+        }else if(auth()->attempt($validated) && auth()->user()->is_admin != 1){
+           return redirect('/student/index');
+        } else{
+
+        
+            return back()->withErrors(['email' => 'Login Failed']);}
 }
+
+        public function examinerIndex(){
+            $authuser = auth()->user()->id;
+            $assignedQuizId = [];
+            $user = DB::table('quiz_user')->where('user_id', $authuser)->get();
+            foreach($user as $u){
+                array_push($assignedQuizId, $u->quiz_id);
+            }
+            $quizzes = Quiz::whereIn('id', $assignedQuizId)->get();
+            $isExamAssigned = DB::table('quiz_user')->where('user_id', $authuser)->exists();
+            $wasQuizCompleted = Result::where('user_id', $authuser)->whereIn('quiz_id', (new Quiz)->hasExamAttempt())->pluck('quiz_id')->toArray();
+            return view('student.examview', compact('quizzes','wasQuizCompleted','isExamAssigned'));
+        }
 
         public function logout(Request $request){
             $request->session()->invalidate();
@@ -87,6 +107,10 @@ class UserController extends Controller
            public function destroy(User $user){
             $user->delete();
             return back()->with('message', 'Successfully Deleted');
+           }
+
+           public function home(){
+            return view('student.index');
            }
 
 }
